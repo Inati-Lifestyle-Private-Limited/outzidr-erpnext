@@ -9315,7 +9315,7 @@ def make_inter_company_delivery_note(stock):
 	)
 	dn.selling_price_list = "_Test Price List"
 	dn.submit()
-	return dn
+	return dn.reload()
 
 
 >>>>>>> 4438ef6 (test: inter-company receipt of two batches at the receipt rate)
