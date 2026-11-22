@@ -294,10 +294,25 @@ class BuyingController(SubcontractingController):
 >>>>>>> a751c0d (fix(stock): carry the delivered batches to an inter-company purchase receipt)
 			return
 
+<<<<<<< HEAD
 		if row.get("rejected_serial_and_batch_bundle") or not row.rejected_warehouse:
 			return
 
 		rejected_qty = flt(flt(row.rejected_qty) * flt(row.conversion_factor), row.precision("stock_qty"))
+=======
+		rejected_package = row.get("rejected_serial_and_batch_bundle")
+		if rejected_package and (
+			frappe.db.get_value("Serial and Batch Bundle", rejected_package, "warehouse")
+			== row.rejected_warehouse
+		):
+			self.resize_package(row, "rejected_serial_and_batch_bundle", "rejected_qty")
+			return
+
+		# the rejected warehouse changed
+		self.remove_package(row, "rejected_serial_and_batch_bundle")
+		if not row.rejected_warehouse:
+			return
+>>>>>>> 5039ce7 (fix(stock): rebuild the rejected package when the rejected warehouse changes)
 
 		row.rejected_serial_and_batch_bundle = self.make_package_for_transfer(
 			package,
