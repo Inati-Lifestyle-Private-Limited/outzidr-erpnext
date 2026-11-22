@@ -183,6 +183,7 @@ class BuyingController(SubcontractingController):
 				elif item.serial_and_batch_bundle:
 					self.resize_package(item, "serial_and_batch_bundle", "qty")
 
+<<<<<<< HEAD
 				if reference and bundle_ids.get(reference) and item.get(field):
 					self.set_rejected_package(item, bundle_ids.get(reference))
 
@@ -217,6 +218,10 @@ class BuyingController(SubcontractingController):
 				as_list=True,
 			)
 		)
+=======
+				if reference and bundle_ids.get(reference):
+					self.set_rejected_package(item, bundle_ids.get(reference))
+>>>>>>> 4cc26c9 (fix(stock): give bundle component rows of an internal receipt their rejected package)
 
 	def make_accepted_package(self, row, package) -> str:
 		"""Package of the material the row accepts.
