@@ -155,8 +155,8 @@ class BuyingController(SubcontractingController):
 				):
 					frappe.set_value("Serial and Batch Entry", sabe[0], "qty", item.qty)
 
-				if item.get(field) and bundle_ids.get(item.get(field)):
-					self.set_rejected_package(item, bundle_ids.get(item.get(field)))
+				if reference and bundle_ids.get(reference):
+					self.set_rejected_package(item, bundle_ids.get(reference))
 
 <<<<<<< HEAD
 =======
