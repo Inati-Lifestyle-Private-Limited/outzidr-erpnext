@@ -3178,8 +3178,11 @@ class TestPurchaseReceipt(FrappeTestCase):
 		}
 
 		self.assertEqual(moved_value[transit_warehouse], -1000)
+<<<<<<< HEAD
 		# The accepted material carries the whole charge on version-15: its entry is valued at the row
 		# rate, not at a share of what left the in-transit warehouse.
+=======
+>>>>>>> 92f46e5 (test: the accepted stock of a transfer takes the whole landed cost)
 		self.assertEqual(moved_value[to_warehouse], 820)
 		self.assertEqual(moved_value[rejected_warehouse], 300)
 
@@ -3193,6 +3196,7 @@ class TestPurchaseReceipt(FrappeTestCase):
 			booked[entry.account] += flt(entry.debit) - flt(entry.credit)
 
 		self.assertEqual(flt(sum(booked.values()), 2), 0)
+		self.assertNotIn("Cost of Goods Sold - TCP1", booked)
 
 	def test_return_of_a_fully_rejected_receipt(self):
 		"""A receipt that rejected every unit can be sent back."""
