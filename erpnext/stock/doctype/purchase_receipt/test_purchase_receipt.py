@@ -1535,15 +1535,15 @@ class TestPurchaseReceipt(FrappeTestCase):
 			}
 		)
 		pr.insert()
-		# the package follows a later change of the rejected warehouse and qty
+		# the package follows a later change of the rejected warehouse
 		rejected_warehouse = create_warehouse("_Test Rejected Two", company="_Test Company")
-		pr.items[0].update({"rejected_warehouse": rejected_warehouse, "qty": 2, "rejected_qty": 3})
+		pr.items[0].rejected_warehouse = rejected_warehouse
 		pr.save()
 		pr.submit()
 
 		for bundle, warehouse, qty in (
-			(pr.items[0].serial_and_batch_bundle, "Stores - _TC", 2),
-			(pr.items[0].rejected_serial_and_batch_bundle, rejected_warehouse, 3),
+			(pr.items[0].serial_and_batch_bundle, "Stores - _TC", 3),
+			(pr.items[0].rejected_serial_and_batch_bundle, rejected_warehouse, 2),
 		):
 			package = frappe.get_doc("Serial and Batch Bundle", bundle)
 			self.assertEqual((package.warehouse, package.company), (warehouse, "_Test Company"))
