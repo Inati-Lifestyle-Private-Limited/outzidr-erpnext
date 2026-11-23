@@ -1747,7 +1747,7 @@ class TestPurchaseReceipt(ERPNextTestSuite):
 		self.assertFalse(pr.terms)
 
 	def test_inter_company_receipt_keeps_delivered_batches(self):
-		from erpnext.stock.doctype.delivery_note.mapper import make_inter_company_purchase_receipt
+		from erpnext.stock.doctype.delivery_note.delivery_note import make_inter_company_purchase_receipt
 
 		dn = make_inter_company_delivery_note(stock=[(5, 100)])
 		batch_no = get_batch_from_bundle(dn.items[0].serial_and_batch_bundle)
@@ -1778,7 +1778,7 @@ class TestPurchaseReceipt(ERPNextTestSuite):
 			self.assertEqual([(d.batch_no, d.qty) for d in package.entries], [(batch_no, qty)])
 
 	def test_inter_company_receipt_values_delivered_batches_at_receipt_rate(self):
-		from erpnext.stock.doctype.delivery_note.mapper import make_inter_company_purchase_receipt
+		from erpnext.stock.doctype.delivery_note.delivery_note import make_inter_company_purchase_receipt
 
 		dn = make_inter_company_delivery_note(stock=[(3, 100), (2, 120)])
 		delivered = frappe.get_doc("Serial and Batch Bundle", dn.items[0].serial_and_batch_bundle)
@@ -1811,7 +1811,7 @@ class TestPurchaseReceipt(ERPNextTestSuite):
 		)
 
 	def test_inter_company_receipt_keeps_picked_batches_when_warehouse_changes(self):
-		from erpnext.stock.doctype.delivery_note.mapper import make_inter_company_purchase_receipt
+		from erpnext.stock.doctype.delivery_note.delivery_note import make_inter_company_purchase_receipt
 
 		dn = make_inter_company_delivery_note(stock=[(3, 100), (2, 120)])
 		pr = make_inter_company_purchase_receipt(dn.name)

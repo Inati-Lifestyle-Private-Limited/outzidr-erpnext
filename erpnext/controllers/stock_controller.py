@@ -1401,6 +1401,7 @@ class StockController(AccountsController):
 			docstatus=self.docstatus,
 			voucher_type=self.doctype,
 			voucher_no=self.name,
+			company=self.company,
 			serial_and_batch_bundle=serial_and_batch_bundle,
 			warehouse=warehouse,
 			type_of_transaction=type_of_transaction,

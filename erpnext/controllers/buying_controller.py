@@ -148,16 +148,7 @@ class BuyingController(SubcontractingController):
 	def create_package_for_transfer(self) -> None:
 		"""Create serial and batch package for Sourece Warehouse in case of inter transfer."""
 
-<<<<<<< HEAD
-		if self.is_internal_transfer() and (
-			self.doctype == "Purchase Receipt" or (self.doctype == "Purchase Invoice" and self.update_stock)
-		):
-=======
-		if self.get("is_return"):
-			return
-
 		if self.get("is_internal_supplier") and self.is_stock_receipt():
->>>>>>> a751c0d (fix(stock): carry the delivered batches to an inter-company purchase receipt)
 			field = "delivery_note_item" if self.doctype == "Purchase Receipt" else "sales_invoice_item"
 
 			doctype = "Delivery Note Item" if self.doctype == "Purchase Receipt" else "Sales Invoice Item"
@@ -183,8 +174,7 @@ class BuyingController(SubcontractingController):
 				elif item.serial_and_batch_bundle:
 					self.resize_package(item, "serial_and_batch_bundle", "qty")
 
-<<<<<<< HEAD
-				if reference and bundle_ids.get(reference) and item.get(field):
+				if reference and bundle_ids.get(reference):
 					self.set_rejected_package(item, bundle_ids.get(reference))
 
 	def get_component_incoming_rates(self) -> dict:
@@ -218,10 +208,6 @@ class BuyingController(SubcontractingController):
 				as_list=True,
 			)
 		)
-=======
-				if reference and bundle_ids.get(reference):
-					self.set_rejected_package(item, bundle_ids.get(reference))
->>>>>>> 4cc26c9 (fix(stock): give bundle component rows of an internal receipt their rejected package)
 
 	def make_accepted_package(self, row, package) -> str:
 		"""Package of the material the row accepts.
@@ -268,14 +254,10 @@ class BuyingController(SubcontractingController):
 		A receipt from an internal supplier builds no package for it on its own, so rejected material
 		of a tracked item would have nothing to say where it came from.
 		"""
-<<<<<<< HEAD
 		if self.is_return:
 			return
 
-		if not self.has_rejected_stock(row):
-=======
 		if not get_stock_qty(row, row.rejected_qty):
->>>>>>> a751c0d (fix(stock): carry the delivered batches to an inter-company purchase receipt)
 			self.remove_package(row, "rejected_serial_and_batch_bundle")
 			return
 
