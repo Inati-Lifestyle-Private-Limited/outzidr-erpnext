@@ -1519,7 +1519,7 @@ class TestPurchaseReceipt(FrappeTestCase):
 		stock.cancel()
 
 	def test_inter_company_receipt_keeps_delivered_batches(self):
-		from erpnext.stock.doctype.delivery_note.mapper import make_inter_company_purchase_receipt
+		from erpnext.stock.doctype.delivery_note.delivery_note import make_inter_company_purchase_receipt
 
 		dn = make_inter_company_delivery_note(stock=[(5, 100)])
 		batch_no = get_batch_from_bundle(dn.items[0].serial_and_batch_bundle)
@@ -1550,7 +1550,7 @@ class TestPurchaseReceipt(FrappeTestCase):
 			self.assertEqual([(d.batch_no, d.qty) for d in package.entries], [(batch_no, qty)])
 
 	def test_inter_company_receipt_values_delivered_batches_at_receipt_rate(self):
-		from erpnext.stock.doctype.delivery_note.mapper import make_inter_company_purchase_receipt
+		from erpnext.stock.doctype.delivery_note.delivery_note import make_inter_company_purchase_receipt
 
 		dn = make_inter_company_delivery_note(stock=[(3, 100), (2, 120)])
 		delivered = frappe.get_doc("Serial and Batch Bundle", dn.items[0].serial_and_batch_bundle)
@@ -1583,7 +1583,7 @@ class TestPurchaseReceipt(FrappeTestCase):
 		)
 
 	def test_inter_company_receipt_keeps_picked_batches_when_warehouse_changes(self):
-		from erpnext.stock.doctype.delivery_note.mapper import make_inter_company_purchase_receipt
+		from erpnext.stock.doctype.delivery_note.delivery_note import make_inter_company_purchase_receipt
 
 		dn = make_inter_company_delivery_note(stock=[(3, 100), (2, 120)])
 		pr = make_inter_company_purchase_receipt(dn.name)
@@ -9300,18 +9300,17 @@ def make_purchase_receipt(**args):
 	return pr
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 test_dependencies = ["BOM", "Item Price", "Location"]
 test_records = frappe.get_test_records("Purchase Receipt")
-=======
-=======
+
+
 def make_inter_company_delivery_note(stock):
 	"""Delivery of a new batch item to _Test Company; stock is the (qty, rate) of each received batch."""
 	from erpnext.selling.doctype.customer.test_customer import create_internal_customer
 	from erpnext.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
 	from erpnext.stock.doctype.stock_entry.test_stock_entry import make_stock_entry
 
+	prepare_data_for_internal_transfer()
 	seller = "_Test Company with perpetual inventory"
 	customer = create_internal_customer(represents_company="_Test Company")
 	allow_party_to_transact_with("Customer", customer, seller)
@@ -9337,10 +9336,8 @@ def make_inter_company_delivery_note(stock):
 	return dn.reload()
 
 
->>>>>>> 4438ef6 (test: inter-company receipt of two batches at the receipt rate)
 def allow_party_to_transact_with(doctype, party, company):
 	doc = frappe.get_doc(doctype, party)
 	if company not in [d.company for d in doc.companies]:
 		doc.append("companies", {"company": company})
 		doc.save()
->>>>>>> 67ac3ad (test: inter-company purchase receipt keeps the delivered batch)
