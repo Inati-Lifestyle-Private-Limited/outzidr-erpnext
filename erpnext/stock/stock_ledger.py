@@ -3384,6 +3384,7 @@ def get_incoming_rate_for_inter_company_transfer(sle) -> float:
 	For inter company transfer, incoming rate is the average of the outgoing rate
 	"""
 	rate = 0.0
+	lcv_rate = 0.0
 
 	field = "delivery_note_item" if sle.voucher_type == "Purchase Receipt" else "sales_invoice_item"
 
@@ -3412,13 +3413,9 @@ def get_incoming_rate_for_inter_company_transfer(sle) -> float:
 
 	# the landed cost is added to the stock accepted, not to what leaves transit or was rejected
 	rejected_warehouse = frappe.get_cached_value(child_doctype, sle.voucher_detail_no, "rejected_warehouse")
-	if sle.actual_qty < 0 or sle.warehouse == rejected_warehouse:
-		return rate
+	if sle.actual_qty > 0 and sle.warehouse != rejected_warehouse:
+		lcv_rate = get_landed_cost_rate(child_doctype, sle.voucher_detail_no, abs(sle.actual_qty))
 
-	return rate + get_landed_cost_rate(child_doctype, sle.voucher_detail_no, abs(sle.actual_qty))
-
-
-<<<<<<< HEAD
 	charges_rate = 0.0
 	if flt(sle.actual_qty) > 0:
 		charge_fields = ["item_tax_amount", "rm_supp_cost"]
@@ -3429,7 +3426,8 @@ def get_incoming_rate_for_inter_company_transfer(sle) -> float:
 			charges_rate = flt(sum(flt(charges.get(f)) for f in charge_fields)) / abs(sle.actual_qty)
 
 	return rate + lcv_rate + charges_rate
-=======
+
+
 def get_landed_cost_rate(child_doctype, voucher_detail_no, stock_qty) -> float:
 	"""Landed cost of a receipt row per unit of stock_qty."""
 	if not stock_qty:
@@ -3437,7 +3435,6 @@ def get_landed_cost_rate(child_doctype, voucher_detail_no, stock_qty) -> float:
 
 	lcv_amount = frappe.db.get_value(child_doctype, voucher_detail_no, "landed_cost_voucher_amount")
 	return flt(lcv_amount) / stock_qty
->>>>>>> d5f69c7 (fix(stock): keep the landed cost in an internal receipt's valuation rate on repost)
 
 
 def is_internal_transfer(sle):
