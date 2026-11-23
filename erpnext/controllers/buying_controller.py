@@ -257,7 +257,9 @@ class BuyingController(SubcontractingController):
 			frappe.db.set_value("Serial and Batch Bundle", new_package, "is_rejected", 1)
 
 		if rejected_package:
-			frappe.delete_doc("Serial and Batch Bundle", rejected_package, force=True, ignore_permissions=True)
+			frappe.delete_doc(
+				"Serial and Batch Bundle", rejected_package, force=True, ignore_permissions=True
+			)
 
 		row.rejected_serial_and_batch_bundle = new_package
 
